@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">BRL Money Converter</string>
+    <string name="app_name">Conversor de Real pra Dólar</string>
+    <string name="btn_converter_text">Converter</string>
+    <string name="brl_text">BRL</string>
+    <string name="usd_text">USD</string>
+    <string name="brl_input_hint_text">Valor em reais</string>
 </resources>

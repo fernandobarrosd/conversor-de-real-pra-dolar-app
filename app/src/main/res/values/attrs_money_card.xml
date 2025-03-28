@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MoneyCard">
+        <attr name="moneyValue" format="string"/>
+        <attr name="currency" format="enum">
+            <enum name="usd" value="0"/>
+            <enum name="brl" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

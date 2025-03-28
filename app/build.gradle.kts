@@ -1,17 +1,21 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
 }
 
 android {
-    namespace = "com.example.brlmoneyconverter"
+    namespace = "com.fernando.brlmoneyconverter"
     compileSdk = 34
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
+
     defaultConfig {
-        applicationId = "com.example.brlmoneyconverter"
+        applicationId = "com.fernando.brlmoneyconverter"
         minSdk = 27
         targetSdk = 34
         versionCode = 1
@@ -20,8 +24,19 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    val localProperties = Properties()
+    val localPropertiesFile = File("local.properties")
+
+    if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+
     buildTypes {
+        debug {
+            buildConfigField("String", "API_TOKEN", localProperties.getProperty("API_TOKEN"))
+        }
         release {
+            buildConfigField("String", "API_TOKEN", localProperties.getProperty("API_TOKEN"))
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -36,6 +51,11 @@ android {
 }
 
 dependencies {
+    val retrofitVersion = "2.11.0"
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofitVersion")
+
 
     implementation(libs.appcompat)
     implementation(libs.material)
