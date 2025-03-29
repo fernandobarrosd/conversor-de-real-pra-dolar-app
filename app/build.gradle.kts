@@ -4,7 +4,22 @@ plugins {
     alias(libs.plugins.androidApplication)
 }
 
+val localProperties = Properties()
+val localPropertiesFile = File("local.properties")
+
+if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file(localProperties["KEY_STORE_PATH"] as String)
+            storePassword = localProperties["KEY_STORE_PASSWORD"] as String
+            keyAlias = localProperties["KEY_STORE_ALIAS"] as String
+            keyPassword = localProperties["KEY_STORE_PASSWORD"] as String
+        }
+    }
     namespace = "com.fernando.brlmoneyconverter"
     compileSdk = 34
 
@@ -22,13 +37,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    val localProperties = Properties()
-    val localPropertiesFile = File("local.properties")
-
-    if (localPropertiesFile.exists() && localPropertiesFile.isFile) {
-        localProperties.load(localPropertiesFile.inputStream())
+        signingConfig = signingConfigs.getByName("release")
     }
 
     buildTypes {
