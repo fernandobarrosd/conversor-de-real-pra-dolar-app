@@ -1,5 +1,7 @@
 package com.fernando.brlmoneyconverter.ui.viewmodels;
 
+import android.net.ConnectivityManager;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,16 +23,21 @@ import retrofit2.Response;
 public class MainViewModel extends ViewModel {
     private final MoneyAPIService moneyAPIService;
 
+    private final ConnectivityManager connectivityManager;
+
     private final MutableLiveData<String> brlValueText = new MutableLiveData<>("R$ 0,00");
 
     private BigDecimal brlValue = new BigDecimal("0.00");
 
     private final MutableLiveData<String> usdValueText = new MutableLiveData<>("$ 0,00");
 
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
-    public MainViewModel(MoneyAPIService moneyAPIService) {
+    private final MutableLiveData<Boolean> internetIsConnected = new MutableLiveData<>();
+
+    public MainViewModel(final MoneyAPIService moneyAPIService, final ConnectivityManager connectivityManager) {
         this.moneyAPIService = moneyAPIService;
+        this.connectivityManager = connectivityManager;
     }
 
     public void calculateQuotation() {
@@ -60,10 +67,19 @@ public class MainViewModel extends ViewModel {
 
             @Override
             public void onFailure(@NonNull Call<DollarQuotationResponse> call, @NonNull Throwable throwable) {
-                isLoading.postValue(true);
+                isLoading.postValue(false);
 
             }
         });
+    }
+
+    public void checkWifiConnection() {
+        if (connectivityManager.getActiveNetwork() != null) {
+            internetIsConnected.postValue(true);
+            return;
+        }
+
+        internetIsConnected.postValue(false);
     }
 
     public LiveData<String> getBrlValueText() {
@@ -76,6 +92,10 @@ public class MainViewModel extends ViewModel {
 
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
+    }
+
+    public LiveData<Boolean> getInternetIsConnected() {
+        return internetIsConnected;
     }
 
     public void updateBRLValue(BigDecimal newBsdValue) {

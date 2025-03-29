@@ -1,5 +1,7 @@
 package com.fernando.brlmoneyconverter.ui;
 
+import android.app.AlertDialog;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,9 +32,10 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        ConnectivityManager connectivityManager = getSystemService(ConnectivityManager.class);
         mainViewModel = new ViewModelProvider(
                 this,
-                new MainViewModelFactory(RetrofitServices.getMoneyAPIService()))
+                new MainViewModelFactory(RetrofitServices.getMoneyAPIService(), connectivityManager))
                 .get(MainViewModel.class);
     }
 
@@ -40,6 +43,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        mainViewModel.checkWifiConnection();
+
+        mainViewModel.getInternetIsConnected().observe(this, internetIsConnected -> {
+            if (!internetIsConnected) {
+                AlertDialog internetNotConnectedAlert = new AlertDialog.Builder(this)
+                        .setTitle("Internet não disponível")
+                        .setMessage("Conecte-se a internet e tente novamente")
+                        .setPositiveButton("Ok", (dialogInterface, i) -> {})
+                        .setNegativeButton("Fechar", ((dialogInterface, i) -> finish()))
+                        .create();
+                internetNotConnectedAlert.show();
+            }
+        });
 
         mainViewModel.getBrlValueText().observe(this, brlValueText ->
                 binding.brlMoneyCard.setMoneyValue(brlValueText));
@@ -61,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        mainViewModel.checkWifiConnection();
 
         binding.brlInput.addTextChangedListener(new TextWatcher() {
 
@@ -91,8 +109,6 @@ public class MainActivity extends AppCompatActivity {
                         .setScale(2, RoundingMode.FLOOR)
                         .divide(new BigDecimal(100), RoundingMode.FLOOR);
 
-                Log.i("MONEY", moneyBigDecimal.toPlainString());
-
 
                 String moneyFormatted = MoneyUtils.convertMoneyToBrFormat(moneyBigDecimal);
 
@@ -112,7 +128,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        binding.btnConverter.setOnClickListener(view -> mainViewModel.calculateQuotation());
+        binding.btnConverter.setOnClickListener(view -> {
+            mainViewModel.checkWifiConnection();
+            mainViewModel.calculateQuotation();
+        });
 
     }
 }

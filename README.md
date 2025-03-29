@@ -1,6 +1,6 @@
 # BRL Money Converter
 
-Um aplicativo de conversão de real pra dólar feito com Java.
+Um aplicativo de conversão de real pra dólal
 
 ## Funcionalidades
 
