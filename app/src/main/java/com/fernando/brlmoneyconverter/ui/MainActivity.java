@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +14,8 @@ import com.fernando.brlmoneyconverter.ui.viewmodels.MainViewModel;
 import com.fernando.brlmoneyconverter.ui.viewmodels.factories.MainViewModelFactory;
 import com.fernando.brlmoneyconverter.retrofit.RetrofitServices;
 import com.fernando.brlmoneyconverter.utils.MoneyUtils;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
