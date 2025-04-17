@@ -5,7 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface MoneyAPIService {
+public interface MoneyQuotationService {
     @GET("v1/currency/USD_BRL")
     Call<DollarQuotationResponse> getDollarQuotation(@Query("token") String token);
 }

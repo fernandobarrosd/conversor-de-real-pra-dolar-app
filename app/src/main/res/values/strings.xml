@@ -3,5 +3,10 @@
     <string name="btn_converter_text">Converter</string>
     <string name="brl_text">BRL</string>
     <string name="usd_text">USD</string>
+    <string name="quotation_text">COTAÇÃO</string>
     <string name="brl_input_hint_text">Valor em reais</string>
+    <string name="internet_not_connected_error_title">Internet não disponível</string>
+    <string name="internet_not_connected_error_message">Conecte-se a internet e tente novamente</string>
+    <string name="alert_dialog_ok_button_text">Ok</string>
+    <string name="alert_dialog_close_button_text">Fechar</string>
 </resources>

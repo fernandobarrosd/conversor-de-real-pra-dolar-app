@@ -6,6 +6,8 @@ espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
 retrofitVersion = "2.11.0"
+hiltVersion = "2.51.1"
+leakCanaryVerion = "2.14"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -15,7 +17,11 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion"}
 retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofitVersion"}
+hilt = { group =  "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion"}
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion" }
+leakCanary = { group = "com.squareup.leakcanary", name = "leakcanary-android",  version.ref = "leakCanaryVerion"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+hiltPlugin = { id = "com.google.dagger.hilt.android", version.ref = "hiltVersion" }
 

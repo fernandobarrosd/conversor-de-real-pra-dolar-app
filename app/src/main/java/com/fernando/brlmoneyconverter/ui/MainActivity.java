@@ -1,26 +1,27 @@
 package com.fernando.brlmoneyconverter.ui;
 
-import android.app.AlertDialog;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.fernando.brlmoneyconverter.databinding.ActivityMainBinding;
+import com.fernando.brlmoneyconverter.ui.dialogs.AppInfoDialog;
 import com.fernando.brlmoneyconverter.ui.viewmodels.MainViewModel;
-import com.fernando.brlmoneyconverter.ui.viewmodels.factories.MainViewModelFactory;
-import com.fernando.brlmoneyconverter.retrofit.RetrofitServices;
+import com.fernando.brlmoneyconverter.ui.dialogs.InternetNotConnectedDialog;
 import com.fernando.brlmoneyconverter.utils.MoneyUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private MainViewModel mainViewModel;
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,54 +29,38 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ConnectivityManager connectivityManager = getSystemService(ConnectivityManager.class);
-        mainViewModel = new ViewModelProvider(
-                this,
-                new MainViewModelFactory(RetrofitServices.getMoneyAPIService(), connectivityManager))
-                .get(MainViewModel.class);
+        initMainViewModel();
+        checkInternetConnection();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void initMainViewModel() {
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+    }
 
-        mainViewModel.checkWifiConnection();
-
-        mainViewModel.getInternetIsConnected().observe(this, internetIsConnected -> {
-            if (!internetIsConnected) {
-                AlertDialog internetNotConnectedAlert = new AlertDialog.Builder(this)
-                        .setTitle("Internet não disponível")
-                        .setMessage("Conecte-se a internet e tente novamente")
-                        .setPositiveButton("Ok", (dialogInterface, i) -> {})
-                        .setNegativeButton("Fechar", ((dialogInterface, i) -> finish()))
-                        .create();
-                internetNotConnectedAlert.show();
-            }
-        });
-
+    private void initObservers() {
         mainViewModel.getBrlValueText().observe(this, brlValueText ->
-                binding.brlMoneyCard.setMoneyValue(brlValueText));
+            binding.brlMoneyCard.setCardContent(brlValueText));
 
         mainViewModel.getUsdValueText().observe(this, usdValueText ->
-                binding.usdMoneyCard.setMoneyValue(usdValueText));
+                binding.usdMoneyCard.setCardContent(usdValueText));
+
+        mainViewModel.getDollarQuotationValueText().observe(this, dollarQuotationText ->
+                binding.quotationMoneyCard.setCardContent(dollarQuotationText));
 
         mainViewModel.getIsLoading().observe(this, isLoading -> {
+            hideKeyboard();
+
             if (isLoading) {
-                binding.progressBar.setVisibility(View.VISIBLE);
-                binding.btnConverter.setVisibility(View.GONE);
+                binding.btnConverter.showLoading();
+                binding.brlInput.setEnabled(false);
                 return;
             }
-            binding.progressBar.setVisibility(View.GONE);
-            binding.btnConverter.setVisibility(View.VISIBLE);
+            binding.btnConverter.removeLoading();
+            binding.brlInput.setEnabled(true);
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        mainViewModel.checkWifiConnection();
-
+    private void initListeners() {
         binding.brlInput.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -125,9 +110,59 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.btnConverter.setOnClickListener(view -> {
-            mainViewModel.checkWifiConnection();
+            checkInternetConnection();
             mainViewModel.calculateQuotation();
         });
 
+        binding.btnShowAppInfoDialog.setOnClickListener(view -> {
+            AppInfoDialog appInfoDialog = new AppInfoDialog();
+            appInfoDialog.show(getSupportFragmentManager(), appInfoDialog.getTag());
+        });
+    }
+
+    private void hideKeyboard() {
+        View view = getCurrentFocus();
+        if (view == null) return;
+
+        InputMethodManager inputMethodManager = getSystemService(InputMethodManager.class);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+
+    private void checkInternetConnection() {
+        if (!mainViewModel.hasInternetConnection()) {
+            InternetNotConnectedDialog internetNotConnectedDialog = new InternetNotConnectedDialog();
+            internetNotConnectedDialog.show(getSupportFragmentManager(), internetNotConnectedDialog.getTag());
+        }
+    }
+
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            mainViewModel.calculateQuotation();
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            finish();
+        }
+        return true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initObservers();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initListeners();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding = null;
     }
 }

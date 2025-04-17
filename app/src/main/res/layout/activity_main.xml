@@ -5,11 +5,22 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.MainActivity"
-    android:background="#4A964C">
+    android:background="?colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/btn_show_app_info_dialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/icon_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"/>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/icon_image_view"
             android:layout_width="100dp"
@@ -33,14 +44,14 @@
             android:textSize="20sp"/>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/input_text_card_view"
+            android:id="@+id/brl_input_card"
             android:layout_width="250dp"
             android:layout_height="50dp"
             app:layout_constraintTop_toBottomOf="@id/title_text_view"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="30dp"
             android:padding="7dp"
+            android:layout_marginTop="30dp"
             app:cardCornerRadius="8dp">
 
             <androidx.appcompat.widget.AppCompatEditText
@@ -57,56 +68,49 @@
                 android:digits="0123456789,." />
         </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/btn_converter_card_view"
-            android:layout_width="180dp"
-            android:layout_height="70dp"
-            app:layout_constraintTop_toBottomOf="@id/input_text_card_view"
+        <com.fernando.brlmoneyconverter.ui.views.LoadingButton
+            android:id="@+id/btn_converter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/brl_input_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="30dp"
-            app:cardCornerRadius="8dp"
-            app:cardBackgroundColor="#2A5D36">
+            app:text="@string/btn_converter_text"
+            app:loadingIsVisible="false"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_converter"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="@string/btn_converter_text"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                android:background="#2A5D36"
-                android:textColor="@color/white" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:indeterminateTint="@color/white"
-                android:visibility="gone"/>
-        </androidx.cardview.widget.CardView>
-
-        <com.fernando.brlmoneyconverter.ui.views.MoneyCard
+        <com.fernando.brlmoneyconverter.ui.views.Card
             android:id="@+id/usd_money_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/btn_converter_card_view"
+            app:layout_constraintTop_toBottomOf="@id/btn_converter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:moneyValue="0.00"
-            app:currency="usd"
-            android:layout_marginTop="80dp"/>
+            app:cardTitle="@string/usd_text"
+            tools:cardContent="$0,00"
+            android:layout_marginTop="50dp"/>
 
-        <com.fernando.brlmoneyconverter.ui.views.MoneyCard
+        <com.fernando.brlmoneyconverter.ui.views.Card
             android:id="@+id/brl_money_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/usd_money_card"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:moneyValue="0.00"
-            app:currency="brl"
+            app:cardTitle="@string/brl_text"
+            tools:cardContent="R$ 0,00"
+            android:layout_marginTop="15dp"/>
+
+        <com.fernando.brlmoneyconverter.ui.views.Card
+            android:id="@+id/quotation_money_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/brl_money_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:cardTitle="@string/quotation_text"
+            tools:cardContent="R$ 0,00"
             android:layout_marginTop="15dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
