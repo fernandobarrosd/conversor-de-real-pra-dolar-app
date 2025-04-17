@@ -16,6 +16,7 @@ Um aplicativo de conversão de real pra dólar
 - Android Studio
 - Java
 - Retrofit
+- Hilt
 
 ## API utilizada
 - Inverter Texto: https://api.invertexto.com/
