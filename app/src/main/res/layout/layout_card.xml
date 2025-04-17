@@ -4,7 +4,7 @@
     android:layout_height="100dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.views.MoneyCard"
+    tools:context=".ui.views.Card"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/money_card_title_text_view"
+            android:id="@+id/title_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/usd_text"
@@ -23,7 +23,7 @@
             android:paddingTop="10dp" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/money_value_text_view"
+            android:id="@+id/content_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="$ 316,53"

@@ -2,6 +2,7 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
+    alias(libs.plugins.hiltPlugin)
 }
 
 val localProperties = Properties()
@@ -34,7 +35,7 @@ android {
         minSdk = 27
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         signingConfig = signingConfigs.getByName("release")
@@ -64,6 +65,12 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
 
+    //Hilt
+    implementation(libs.hilt)
+    annotationProcessor(libs.hilt.compiler)
+
+    // Leak Canary
+    debugImplementation(libs.leakCanary)
 
     implementation(libs.appcompat)
     implementation(libs.material)

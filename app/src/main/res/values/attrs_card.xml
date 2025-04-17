@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Card">
+        <attr name="cardTitle" format="string|reference"/>
+        <attr name="cardContent" format="string"/>
+    </declare-styleable>
+</resources>

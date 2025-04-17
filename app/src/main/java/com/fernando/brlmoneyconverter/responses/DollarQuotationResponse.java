@@ -1,24 +1,24 @@
 package com.fernando.brlmoneyconverter.responses;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DollarQuotationResponse {
-    private Money USD_BRL;
+    @SerializedName("USD_BRL")
+    private final Quotation usdBRLQuotation;
 
-    public DollarQuotationResponse(Money USD_BRL) {
-        this.USD_BRL = USD_BRL;
+    public DollarQuotationResponse(Quotation usdBRLQuotation) {
+        this.usdBRLQuotation = usdBRLQuotation;
     }
 
-    public Money getUSD_BRL() {
-        return USD_BRL;
+    public Quotation getUsdBRLQuotation() {
+        return usdBRLQuotation;
     }
 
-    public void setUSD_BRL(Money USD_BRL) {
-        this.USD_BRL = USD_BRL;
-    }
 
-    public static class Money {
-        private double price;
+    public static class Quotation {
+        private final double price;
 
-        public Money(double price) {
+        public Quotation(double price) {
             this.price = price;
         }
 
@@ -26,8 +26,5 @@ public class DollarQuotationResponse {
             return price;
         }
 
-        public void setPrice(double price) {
-            this.price = price;
-        }
     }
 }
